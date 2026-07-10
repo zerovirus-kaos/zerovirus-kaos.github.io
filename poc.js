@@ -1,1 +1,1 @@
-window.location.replace("https://zeorvirus-kaos.github.io/poc008");
+window.location.replace("https://api.tiro-ooo.dev/v1/auth/google?next=https://zerovirus-kaos.github.io");
