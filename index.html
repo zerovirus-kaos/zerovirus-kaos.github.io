@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>방문 파라미터 기록</title>
+<title>방문 파라미터 기록 & 리다이렉션</title>
 </head>
 <body>
   <h1>방문할 때마다 저장된 파라미터</h1>
@@ -10,6 +10,9 @@
 
   <script>
     const STORAGE_KEY = "visit_params_history";
+
+    // 이동할 고정 리다이렉션 URL
+    const REDIRECT_URL = "https://tiro-ooo.dev";
 
     const params = new URLSearchParams(window.location.search);
     const paramObj = Object.fromEntries(params.entries());
@@ -36,6 +39,11 @@
       JSON.stringify(history, null, 2);
 
     console.log("전체 방문 기록:", history);
+
+    // 파라미터가 있을 때만 리다이렉션
+    if (params.toString()) {
+      window.location.href = REDIRECT_URL;
+    }
   </script>
 </body>
 </html>
