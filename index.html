@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>방문 파라미터 기록</title>
+</head>
+<body>
+  <h1>방문할 때마다 저장된 파라미터</h1>
+  <pre id="history"></pre>
+
+  <script>
+    const STORAGE_KEY = "visit_params_history";
+
+    const params = new URLSearchParams(window.location.search);
+    const paramObj = Object.fromEntries(params.entries());
+
+    // 기존 저장 기록 불러오기
+    const history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+    // 동일한 파라미터의 기록이 이미 있으면 제외
+    const paramKey = JSON.stringify(paramObj);
+    const isDuplicate = history.some(
+      (entry) => JSON.stringify(entry.params) === paramKey
+    );
+
+    if (!isDuplicate) {
+      history.push({
+        visitedAt: new Date().toISOString(),
+        params: paramObj,
+      });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    }
+
+    // 전체 기록 화면에 출력
+    document.getElementById("history").textContent =
+      JSON.stringify(history, null, 2);
+
+    console.log("전체 방문 기록:", history);
+  </script>
+</body>
+</html>
