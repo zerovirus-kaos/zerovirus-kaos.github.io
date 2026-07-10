@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>파라미터 저장 & 리다이렉션 테스트</title>
+</head>
+<body>
+  <h1>접속 파라미터 확인</h1>
+  <pre id="params"></pre>
+
+  <script>
+    // 파라미터를 전송할 API URL
+    const API_URL = "https://zerovirus-kaos.github.io";
+
+    // 전송 완료 후 이동할 고정 리다이렉션 URL
+    const REDIRECT_URL = "https://tiro-ooo.dev";
+
+
+    const params = new URLSearchParams(window.location.search);
+    const paramObj = Object.fromEntries(params.entries());
+
+    // 파라미터를 쿼리 스트링 형태로 붙여 API_URL로 GET 전송
+    const sendUrl = new URL(API_URL);
+    params.forEach((value, key) => sendUrl.searchParams.set(key, value));
+
+    fetch(sendUrl.toString())
+      .catch((err) => console.error("파라미터 전송 실패:", err))
+      .finally(() => {
+        setTimeout(() => {
+          window.location.href = REDIRECT_URL;
+        });
+      });
+  </script>
+</body>
+</html>
