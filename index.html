@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>파라미터 저장 & 리다이렉션 테스트</title>
+</head>
+<body>
+  <h1>접속 파라미터 확인</h1>
+  <pre id="params"></pre>
+
+  <script>
+    // 리다이렉션할 기본 URL (원하는 대상으로 수정하세요)
+    const BASE_URL = "https://api.tiro-ooo.dev";
+
+    // 3초 후 리다이렉션 (테스트 중엔 화면 확인용 딜레이)
+    const REDIRECT_DELAY_MS = 3000;
+
+    const params = new URLSearchParams(window.location.search);
+    const paramObj = Object.fromEntries(params.entries());
+
+    // 화면에 파라미터 출력 (테스트용)
+    document.getElementById("params").textContent =
+      JSON.stringify(paramObj, null, 2);
+
+    console.log("전달받은 파라미터:", paramObj);
+
+    // BASE_URL + 기존 파라미터를 붙여 리다이렉션
+    const redirectUrl = new URL(BASE_URL);
+    params.forEach((value, key) => redirectUrl.searchParams.set(key, value));
+
+    setTimeout(() => {
+      window.location.href = redirectUrl.toString();
+    }, REDIRECT_DELAY_MS);
+  </script>
+</body>
+</html>
