@@ -17,7 +17,7 @@
     async function search(query) {
         try {
             await req(
-              `http://host3.dreamhack.games:11675/search?query=${query}`
+              `http://localhost:8000/search?query=${query}`
             );
             return true;
         } catch (e) {
